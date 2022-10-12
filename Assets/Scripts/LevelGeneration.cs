@@ -19,6 +19,9 @@ public class LevelGeneration : MonoBehaviour
     public bool stopGeneration = false;
 
     private int downCounter = 0;
+    public GameObject WinRoom;
+    private GameObject FinalRoom;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -133,6 +136,9 @@ public class LevelGeneration : MonoBehaviour
             }
             else
             {
+                Collider2D roomDetection = Physics2D.OverlapCircle(transform.position, 1, room);
+                roomDetection.GetComponent<RoomType>().RoomDestruction();
+                Instantiate(WinRoom, transform.position, Quaternion.identity);
                 stopGeneration = true;
             }
         }
