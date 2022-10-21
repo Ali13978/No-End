@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
     
     private void Movement()
     {
-        float ControlThrow = Input.GetAxis("Horizontal");
+        float ControlThrow = CrossPlatformInputManager.GetAxis("Horizontal");
         Vector2 PlayerVelocity = new Vector2(ControlThrow * MovementSpeed, MyRigidBody.velocity.y);
         MyRigidBody.velocity = PlayerVelocity;
         bool IfPlayerHasHorizontalSpeed = Mathf.Abs(MyRigidBody.velocity.x) > Mathf.Epsilon;
@@ -65,11 +65,12 @@ public class PlayerController : MonoBehaviour
     private void Jump()
     {
         if (!CheckGround()) return;
-        if (Input.GetButtonDown("Jump"))
+        if (CrossPlatformInputManager.GetButtonDown("Jump"))
         {
             Anim.SetBool("isJumping", true);
             Vector2 JumpVelocity = new Vector2(0f, JumpSpeed);
             MyRigidBody.velocity += JumpVelocity;
+            CinemachineShake.Instance.ShakeCamera(0.2f, 0.3f);
         }
     }
 
@@ -90,7 +91,7 @@ public class PlayerController : MonoBehaviour
         {
             if(collision.collider == collision.gameObject.GetComponent<Enemy>().EnemyDeathCollider)
             {
-                Destroy(collision.gameObject);
+                collision.gameObject.GetComponent<Enemy>().DeathAnimTrigger();
             }
             else
             {
@@ -106,7 +107,12 @@ public class PlayerController : MonoBehaviour
 
     private void Died()
     {
-        //Do Something
+        MyRigidBody.bodyType = RigidbodyType2D.Static;
+        Anim.SetTrigger("Died");
+    }
+
+    private void DeathComplete()
+    {
         SceneManager.LoadScene(0);
     }
 

@@ -59,4 +59,18 @@ public class Enemy : MonoBehaviour
     {
         return Physics2D.Raycast(RayCastPoint.transform.position, Vector2.right, RayLength, mask);
     }
+
+    public void DeathAnimTrigger()
+    {
+        MyRigidBody.bodyType = RigidbodyType2D.Static;
+        CinemachineShake.Instance.ShakeCamera(2f, 0.1f);
+        Destroy(EnemyDeathCollider);
+        Destroy(PlayerDeathCollider);
+        GetComponent<Animator>().SetTrigger("Died");
+    }
+
+    public void Died()
+    {
+        Destroy(gameObject);
+    }
 }
