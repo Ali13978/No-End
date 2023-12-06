@@ -24,11 +24,17 @@ public class PlayerController : MonoBehaviour
     
     Rigidbody2D MyRigidBody;
     Animator Anim;
+    private AudioSource audioSource;
+
+    [Header("Audios")]
+    [SerializeField] AudioClip walkAudio;
+    [SerializeField] AudioClip jumpAudio;
 
     private void Start()
     {
         MyRigidBody = GetComponent<Rigidbody2D>();
         Anim = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
     }
     private void Update()
     {
@@ -49,6 +55,7 @@ public class PlayerController : MonoBehaviour
         if(IfPlayerHasHorizontalSpeed)
         {
             CreateDust();
+            PlayAudio(walkAudio);
         }
     }
 
@@ -119,5 +126,12 @@ public class PlayerController : MonoBehaviour
     private void CreateDust()
     {
         dust.Play();
+    }
+
+    public void PlayAudio(AudioClip audioClip)
+    {
+        audioSource.clip = audioClip;
+        if(!audioSource.isPlaying)
+            audioSource.Play();
     }
 }
